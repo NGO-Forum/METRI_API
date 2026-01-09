@@ -4,30 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LearningLabRegistration extends Model
+class InterestRegistration extends Model
 {
     protected $fillable = [
-        'learning_lab_id',
         'full_name',
         'organization',
         'role_position',
         'email',
         'phone',
         'province',
-        'is_ngof_member',
-        'ngo_name',
-        'payment_percentage',
-        'special_needs',
+        'interests',
         'consent',
     ];
 
     protected $casts = [
-        'is_ngof_member' => 'boolean',
+        'interests' => 'array',
         'consent' => 'boolean',
     ];
-
-    public function learningLab()
-    {
-        return $this->belongsTo(LearningLab::class);
-    }
 }

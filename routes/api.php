@@ -6,7 +6,16 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LearningLabController;
 use App\Http\Controllers\Admin\LearningLabController as AdminLearningLabController;
 use App\Http\Controllers\LearningLabRegistrationController;
+use App\Http\Controllers\Admin\InterestRegistrationAdminController;
 use App\Http\Controllers\Admin\LearningLabRegistrationController as AdminRegistrationController;
+use App\Http\Controllers\InterestRegistrationController;
+
+
+// interested
+Route::post(
+    '/interest-registrations',
+    [InterestRegistrationController::class, 'store']
+);
 
 /*
 |--------------------------------------------------------------------------
@@ -36,8 +45,20 @@ Route::middleware(['auth:sanctum', 'is_admin'])
     ->prefix('admin')
     ->group(function () {
         Route::apiResource('learning-labs', AdminLearningLabController::class);
+        
+        Route::get(
+            'learning-lab-registration-summary',
+            [AdminRegistrationController::class, 'index']
+        );
+
+        // ✅ View registrations for ONE learning lab (FIXED)
         Route::get(
             'learning-labs/{learningLab}/registrations',
-            [AdminRegistrationController::class, 'index']
+            [AdminRegistrationController::class, 'show']
+        );
+
+        Route::get(
+            'interest-registrations',
+            [InterestRegistrationAdminController::class, 'index']
         );
     });

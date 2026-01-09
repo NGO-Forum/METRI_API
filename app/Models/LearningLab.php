@@ -14,7 +14,22 @@ class LearningLab extends Model
         'topic',
         'time',
         'format',
+        'link',
+        'description',
         'speakers',
         'is_published',
     ];
+
+    protected $casts = [
+        'date' => 'date',
+        'is_published' => 'boolean',
+    ];
+
+    /**
+     * A learning lab has many registrations
+     */
+    public function registrations()
+    {
+        return $this->hasMany(LearningLabRegistration::class);
+    }
 }

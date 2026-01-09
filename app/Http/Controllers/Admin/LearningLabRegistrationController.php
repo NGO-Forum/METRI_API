@@ -4,17 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\LearningLab;
-use App\Models\LearningLabRegistration;
 
 class LearningLabRegistrationController extends Controller
 {
     /**
      * List registrations for a learning lab
      */
-    public function index(LearningLab $learningLab)
+    public function index()
     {
-        return LearningLabRegistration::where('learning_lab_id', $learningLab->id)
+        return LearningLab::withCount('registrations')
             ->latest()
-            ->paginate(20);
+            ->get();
+    }
+
+    public function show(LearningLab $learningLab)
+    {
+        return $learningLab->registrations()
+            ->latest()
+            ->paginate(10);
     }
 }

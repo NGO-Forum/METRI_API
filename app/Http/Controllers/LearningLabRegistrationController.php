@@ -26,13 +26,15 @@ class LearningLabRegistrationController extends Controller
 
             // Conditional fields
             'ngo_name' => 'nullable|string|max:255',
-            'payment_percentage' => 'nullable|integer|in:25,50,75,100',
+            'payment_percentage' => 'nullable|integer|in:25,50,100',
 
             'special_needs' => 'nullable|string',
-            'consent' => 'required|boolean',
+
+            // MUST be checked
+            'consent' => 'accepted',
         ]);
 
-        // ✅ BUSINESS RULE ENFORCEMENT
+        // BUSINESS RULES
         if ($validated['is_ngof_member']) {
             if (empty($validated['ngo_name'])) {
                 return response()->json([

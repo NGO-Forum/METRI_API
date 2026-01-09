@@ -31,6 +31,7 @@ return new class extends Migration {
             $table->text('special_needs')->nullable();
 
             $table->boolean('consent')->default(false);
+            $table->unique(['learning_lab_id', 'email']);
 
             $table->timestamps();
         });

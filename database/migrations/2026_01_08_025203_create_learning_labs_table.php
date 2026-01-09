@@ -11,9 +11,11 @@ return new class extends Migration {
             $table->id();
             $table->date('date');
             $table->string('topic');
-            $table->string('time');          // e.g. 9:00–12:00
-            $table->string('format');        // Online / In-person
-            $table->text('speakers');        // Names & roles
+            $table->string('time'); 
+            $table->enum('format', ['online', 'in_person', 'hybrid']); 
+            $table->string('link')->nullable();    
+            $table->text('description');   
+            $table->text('speakers');      
             $table->boolean('is_published')->default(true);
             $table->timestamps();
         });
