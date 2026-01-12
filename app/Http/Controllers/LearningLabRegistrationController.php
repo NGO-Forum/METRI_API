@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LearningLab;
 use App\Models\LearningLabRegistration;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class LearningLabRegistrationController extends Controller
 {
@@ -14,6 +15,17 @@ class LearningLabRegistrationController extends Controller
      */
     public function store(Request $request, LearningLab $learningLab)
     {
+        // ✅ Prevent duplicate email per learning lab
+        $exists = LearningLabRegistration::where('learning_lab_id', $learningLab->id)
+            ->where('email', $request->email)
+            ->exists();
+
+        if ($exists) {
+            throw ValidationException::withMessages([
+                'email' => 'This email is already registered for this Learning Lab.',
+            ]);
+        }
+
         $validated = $request->validate([
             'full_name' => 'required|string|max:255',
             'organization' => 'required|string|max:255',

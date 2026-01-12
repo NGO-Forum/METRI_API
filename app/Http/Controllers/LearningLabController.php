@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LearningLab;
+use Carbon\Carbon;
 
 class LearningLabController extends Controller
 {
@@ -12,6 +13,7 @@ class LearningLabController extends Controller
     public function index()
     {
         return LearningLab::where('is_published', true)
+            ->whereDate('date', '>=', Carbon::today())
             ->orderBy('date', 'asc')
             ->get();
     }

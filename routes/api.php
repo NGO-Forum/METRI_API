@@ -24,7 +24,8 @@ Route::post(
 */
 Route::post('/admin/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/admin/logout', [AuthController::class, 'logout']);
-
+Route::post('/admin/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/admin/reset-password', [AuthController::class, 'resetPassword']);
 /*
 |--------------------------------------------------------------------------
 | Public Website (NO LOGIN)
