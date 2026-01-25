@@ -12,8 +12,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('learninglabs:send-reminders')->dailyAt('08:00');
+        $schedule->command('learninglabs:send-reminders')
+            ->everyMinute()
+            ->withoutOverlapping();
     }
+
 
     /**
      * Register the commands for the application.

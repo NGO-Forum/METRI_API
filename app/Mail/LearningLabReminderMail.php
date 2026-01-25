@@ -2,24 +2,20 @@
 
 namespace App\Mail;
 
-use App\Models\LearningLab;
-use App\Models\LearningLabRegistration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\SerializesModels;
 
-class LearningLabReminderMail extends Mailable
+class LearningLabReminderMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $lab;
-    public $registration;
-
-    public function __construct(LearningLab $lab, LearningLabRegistration $registration)
-    {
-        $this->lab = $lab;
-        $this->registration = $registration;
-    }
+    public function __construct(
+        public $lab,
+        public $registration,
+        public int $daysBefore
+    ) {}
 
     public function build()
     {
