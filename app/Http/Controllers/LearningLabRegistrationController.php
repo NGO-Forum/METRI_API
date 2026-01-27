@@ -6,6 +6,9 @@ use App\Models\LearningLab;
 use App\Models\LearningLabRegistration;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use App\Exports\LearningLabRegistrationsExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class LearningLabRegistrationController extends Controller
 {
@@ -71,5 +74,13 @@ class LearningLabRegistrationController extends Controller
             'status' => true,
             'message' => 'Registration successful',
         ], 201);
+    }
+
+    public function export(LearningLab $learningLab)
+    {
+        return Excel::download(
+            new LearningLabRegistrationsExport($learningLab->id),
+            'learning_lab_' . $learningLab->id . '_registrations.xlsx'
+        );
     }
 }

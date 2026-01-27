@@ -17,6 +17,8 @@ Route::post(
     [InterestRegistrationController::class, 'store']
 );
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Admin Auth
@@ -46,7 +48,7 @@ Route::middleware(['auth:sanctum', 'is_admin'])
     ->prefix('admin')
     ->group(function () {
         Route::apiResource('learning-labs', AdminLearningLabController::class);
-        
+
         Route::get(
             'learning-lab-registration-summary',
             [AdminRegistrationController::class, 'index']
@@ -61,5 +63,10 @@ Route::middleware(['auth:sanctum', 'is_admin'])
         Route::get(
             'interest-registrations',
             [InterestRegistrationAdminController::class, 'index']
+        );
+
+        Route::get(
+            'learning-labs/{learningLab}/export',
+            [LearningLabRegistrationController::class, 'export']
         );
     });

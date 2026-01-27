@@ -17,30 +17,21 @@ class SendLearningLabReminderEmails extends Command
     {
         $now = now();
 
-        // ===== 3 DAYS BEFORE =====
-        $this->sendReminder(
-            daysBefore: 3,
-            sentColumn: 'reminder_3d_sent_at',
-            now: $now
-        );
+        // 3 days before
+        $this->sendReminder(3, $now);
 
-        // ===== 1 DAY BEFORE =====
-        $this->sendReminder(
-            daysBefore: 1,
-            sentColumn: 'reminder_1d_sent_at',
-            now: $now
-        );
+        // 1 day before
+        $this->sendReminder(1, $now);
 
         return Command::SUCCESS;
     }
 
-    private function sendReminder(int $daysBefore, string $sentColumn, Carbon $now)
+    private function sendReminder(int $daysBefore, Carbon $now)
     {
-        $targetStart = $now->copy()->addDays($daysBefore)->startOfDay();
-        $targetEnd   = $now->copy()->addDays($daysBefore)->endOfDay();
-
-        $labs = LearningLab::whereBetween('date', [$targetStart, $targetEnd])
-            ->whereNull($sentColumn)
+        $labs = LearningLab::whereDate(
+            'date',
+            $now->copy()->addDays($daysBefore)->toDateString()
+        )
             ->where('is_published', true)
             ->with('registrations')
             ->get();
@@ -48,13 +39,12 @@ class SendLearningLabReminderEmails extends Command
         foreach ($labs as $lab) {
             foreach ($lab->registrations as $registration) {
                 Mail::to($registration->email)
-                    ->queue(new LearningLabReminderMail($lab, $registration, $daysBefore));
+                    ->queue(new LearningLabReminderMail(
+                        $lab,
+                        $registration,
+                        $daysBefore
+                    ));
             }
-
-            // Mark reminder as sent
-            $lab->update([
-                $sentColumn => now(),
-            ]);
         }
     }
 }
